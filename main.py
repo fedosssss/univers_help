@@ -2,14 +2,12 @@ import telebot
 from telebot import types
 import calendar
 from datetime import datetime
-
-'''install only pytelegrambotapi, not telebot,elif delete all packages and install one more time pytelegrambotapi'''
-
-bot=telebot.TeleBot("5214184582:AAEP_U-5JSyRj6sS9_MW64VROTtljklZQfg")
+from threading import Thread
 
 
 def schedule_returner(choise):#returns the schedule for a day/week
-    global day_now
+    datee=datetime.now()
+    day_now=datee.day    
     data_1 = {
         'Понедельник': [
             {1:'Компьютерные языки разметки(лекция)'},
@@ -86,7 +84,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
             
         ]
         }
-
+            
 
     def returner_sch(day,index):#вывод дня
         returning_list_nums=[]
@@ -99,6 +97,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get(day):
                 for key in dicts.keys():
@@ -110,11 +109,9 @@ def schedule_returner(choise):#returns the schedule for a day/week
                     
         for log in range(len(returning_list_nums)):
             result+=f'{returning_list_nums[log]} урок: {returning_list_less[log]}\n'
-            print(result)
-
                                 
         return result
-
+    
     def returner_sch_week(index):#not even beautiful def(doesn't affect)вывод недели
         week_result=''
         returning_list_nums=[]
@@ -127,6 +124,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Понедельник"):
                 for key in dicts.keys():
@@ -150,6 +148,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Вторник"):
                 for key in dicts.keys():
@@ -172,6 +171,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Среда"):
                 for key in dicts.keys():
@@ -186,6 +186,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
         returning_list_nums=[]
         returning_list_less=[]
         result=''
+
         if index==1:
             for dicts in data_1.get("Четверг"):
                 for key in dicts.keys():
@@ -193,6 +194,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Четверг"):
                 for key in dicts.keys():
@@ -215,6 +217,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Пятница"):
                 for key in dicts.keys():
@@ -237,6 +240,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
                 for item in dicts.values():
                     returning_list_less.append(item)
+                    
         elif index==2:
             for dicts in data_2.get("Суббота"):
                 for key in dicts.keys():
@@ -251,39 +255,25 @@ def schedule_returner(choise):#returns the schedule for a day/week
                 
         return week_result
 
-
-
     
-        
-    datee=datetime.now()
-    day_now=datee.day
-    weeks_in_month=calendar.monthcalendar(datee.year,datee.month)
-    for week in weeks_in_month:
-        if day_now in week:
-            week_index=int(weeks_in_month.index(week))+1
-            if week_index%2==0:
-                week_index=2
-            else:
-                week_index=1
-
-            
     if choise == "for_a_day":#prints schedule for a week
-        
         day_now_in_week=datetime.today().isoweekday()
         if day_now_in_week == 1:
             return returner_sch("Понедельник",week_index)
 
         elif day_now_in_week == 2:
             return returner_sch("Вторник",week_index)
-        
+                
         elif day_now_in_week == 3:
             return returner_sch("Среда",week_index)
         
         elif day_now_in_week == 4:
+            print(week_index)
             return returner_sch("Четверг",week_index)
         
         elif day_now_in_week == 5:
             return returner_sch("Пятница",week_index)
+        
         elif day_now_in_week == 6:
             return returner_sch("Суббота",week_index)
         
@@ -292,7 +282,8 @@ def schedule_returner(choise):#returns the schedule for a day/week
 
     if choise == "for_a_week":#prints schedule for a week
         return returner_sch_week(week_index)
-
+    
+    
 
 def hours_returner(choise):
     datee=datetime.now()
@@ -596,6 +587,7 @@ def hours_returner(choise):
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+bot=telebot.TeleBot("5214184582:AAEP_U-5JSyRj6sS9_MW64VROTtljklZQfg")
 @bot.message_handler(commands=["start"])
 def start(message):
     if message.from_user.last_name != None: 
@@ -611,11 +603,11 @@ def start(message):
 
 @bot.message_handler(commands=["schedule"])#output of schedule on a day or week
 def schedule(message):
+    global mess
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='На день', callback_data="for_a_day"))
     markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
-
 
 @bot.message_handler(commands=["add_laba"])#output of schedule on a day or week
 def laba(message):
@@ -623,15 +615,12 @@ def laba(message):
     markup.add(telebot.types.InlineKeyboardButton(text='На день', callback_data="for_a_day"))
     markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
-
+    
 '''@bot.message_handler(content_types=["text"])
 def chatting(message):
-    if message.text=='пососи':
+    if "Выберите вариант:" in message.text:
         bot.delete_message(message.chat.id,message.message_id)
         bot.send_message(message.chat.id, text="сам пососи")'''
-
-
-
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -639,6 +628,7 @@ def query_handler(call):
     #bot.answer_callback_query(callback_query_id=call.id, text='Спасибо за честный ответ!')
     answer = ''
     if call.data == 'for_a_day':
+        
         answer = schedule_returner("for_a_day")
     elif call.data == 'for_a_week':
         answer = schedule_returner("for_a_week")
@@ -649,7 +639,7 @@ def query_handler(call):
         pass
     elif call.data == 'until_education':
         pass
-    print(answer)#None
+    
     bot.send_message(call.message.chat.id, answer)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -664,4 +654,29 @@ def hours(message):
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
 
-bot.polling(none_stop=True)
+
+    
+def week_index_pool():#thread week poll
+    global week_index
+    cache_now=0
+    week_cache=0#input info
+    week_index=2#input info
+    while True:
+        datee=datetime.now()
+        day_now=datee.day
+        if day_now!=cache_now:
+            cache_now=day_now
+            week_cache+=1
+            
+        if week_cache==8:
+            week_cache=1#or 0 , maybe 1:(
+            week_index+=1
+            
+        if week_index==3:
+            week_index=1
+            
+          
+th1=Thread(target=week_index_pool)#thread settings
+th1.start()#week_index thread polling
+bot.polling(none_stop=True)#bot work
+    

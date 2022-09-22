@@ -1,0 +1,1 @@
+install only pytelegrambotapi, not telebot,elif delete all packages and install one more time pytelegrambotapi
