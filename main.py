@@ -596,50 +596,87 @@ def start(message):
         mess=f'Привет, <b>{message.from_user.first_name} </b>, я попытаюсь помочь тебе с учёбой. Слева есть меню, там ты найдёшь всё самое нужное'
     else:
         mess=f'Привет, я попытаюсь помочь тебе с учёбой. Слева есть меню, там ты найдёшь всё самое нужное'
-        
-        
+              
     bot.send_message(message.chat.id,mess,parse_mode="html")
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 @bot.message_handler(commands=["schedule"])#output of schedule on a day or week
 def schedule(message):
-    global mess
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='На день', callback_data="for_a_day"))
     markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
-@bot.message_handler(commands=["add_laba"])#output of schedule on a day or week
-def laba(message):
-    markup = telebot.types.InlineKeyboardMarkup()
-    markup.add(telebot.types.InlineKeyboardButton(text='На день', callback_data="for_a_day"))
-    markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
-    bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
+@bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
+def add_laba(message):
+    markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item1=types.KeyboardButton("Да, сегодня")
+    item2=types.KeyboardButton("Нет, в другой день")
+    markup.add(item1, item2)
+    bot.send_message(message.chat.id,'Лабараторная была сегодня?',reply_markup=markup)
+
     
-'''@bot.message_handler(content_types=["text"])
-def chatting(message):
-    if "Выберите вариант:" in message.text:
-        bot.delete_message(message.chat.id,message.message_id)
-        bot.send_message(message.chat.id, text="сам пососи")'''
+
+        
+@bot.message_handler(content_types=["text"])
+def static_reply(message):
+    print("active reply")
+    global laba_status
+    if message.text == 'Да, сегодня':
+        laba_status = "today"
+        bot.send_message(message.chat.id,'Введите название')
+        
+
+    elif message.text == 'Нет, в другой день':
+        laba_status = "another_day"
+        bot.send_message(message.chat.id,'Bведите название')
+
+    elif laba_status == "today" and message.text:
+        print(message.text)
+        laba_status = None
+
+        
+    
+    #bot.send_message(message.chat.id,'Выберите корректный вариант ответа!')
+        
 
 
+
+@bot.message_handler(content_types='text')#works with add_laba def
+def message_reply(message):
+    if message.text=="Кнопка":
+        bot.send_message(message.chat.id,"https://habr.com/ru/users/lubaznatel/")
+
+        
+    
 @bot.callback_query_handler(func=lambda call: True)
 def query_handler(call):
     #bot.answer_callback_query(callback_query_id=call.id, text='Спасибо за честный ответ!')
     answer = ''
     if call.data == 'for_a_day':
-        
         answer = schedule_returner("for_a_day")
+        
     elif call.data == 'for_a_week':
         answer = schedule_returner("for_a_week")
+        
     elif call.data == 'until_day':#pro
         answer = hours_returner("until_day")
+        
     elif call.data == 'until_week':
         answer = hours_returner("until_week")
-        pass
+        
     elif call.data == 'until_education':
-        pass
+        answer = "no data"
+        
+    '''elif call.data == 'laba_today':
+        ansver
+        
+
+
     
+    elif call.data == 'laba_another_day':
+        answer = "no data"'''
+
     bot.send_message(call.message.chat.id, answer)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -675,7 +712,7 @@ def week_index_pool():#thread week poll
         if week_index==3:
             week_index=1
             
-          
+laba_status=None          
 th1=Thread(target=week_index_pool)#thread settings
 th1.start()#week_index thread polling
 bot.polling(none_stop=True)#bot work
