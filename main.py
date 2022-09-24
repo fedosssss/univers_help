@@ -599,7 +599,17 @@ def start(message):
               
     bot.send_message(message.chat.id,mess,parse_mode="html")
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+@bot.message_handler(commands=["mass"])
+def labs_sender(message):
+    labs_result = ''
+    for data_mass in labs_massive:
+        for data_lab in data_mass:
+            print(' '.join(str(data_lab)))
+            
+            
+    bot.send_message(message.chat.id,str(labs_massive))
 
+    
 @bot.message_handler(commands=["schedule"])#output of schedule on a day or week
 def schedule(message):
     markup = telebot.types.InlineKeyboardMarkup()
@@ -608,7 +618,7 @@ def schedule(message):
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
 @bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
-def add_laba(message):
+def add_laba_1(message):
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1=types.KeyboardButton("Да, сегодня")
     item2=types.KeyboardButton("Нет, в другой день")
@@ -621,33 +631,43 @@ def add_laba(message):
 @bot.message_handler(content_types=["text"])
 def static_reply(message):
     print("active reply")
-    global laba_status
-    if message.text == 'Да, сегодня':
-        laba_status = "today"
+    global laba_status1
+    if message.text == 'Да, сегодня' and laba_status1 == None:
+        print("today update")
+        laba_status1 = "today"
         bot.send_message(message.chat.id,'Введите название')
         
 
-    elif message.text == 'Нет, в другой день':
-        laba_status = "another_day"
+    elif message.text == 'Нет, в другой день' and laba_status1 == None:
+        laba_status1 = "another_day"
         bot.send_message(message.chat.id,'Bведите название')
 
-    elif laba_status == "today" and message.text:
-        print(message.text)
-        laba_status = None
+    elif laba_status1 == "today" and message.text:
+        #message.text-название предмета
+        lab_name=message.text
+        lab_date_year=datee.year
+        lab_date_month=datee.month
+        lab_date_day=datee.day
+        lab_date_hour=datee.hour
+        lab_date_minute=datee.minute
+        lab_addiction=[lab_name,lab_date_year,lab_date_month,lab_date_day,lab_date_hour,lab_date_minute]
+        labs_massive.append(lab_addiction)
+        bot.send_message(message.chat.id,'Массив обновлён')
+        laba_status1 = None
 
-        
+    elif laba_status1 == "another_day" and message.text:
+        pass
     
     #bot.send_message(message.chat.id,'Выберите корректный вариант ответа!')
         
 
-
+'''
 
 @bot.message_handler(content_types='text')#works with add_laba def
 def message_reply(message):
     if message.text=="Кнопка":
         bot.send_message(message.chat.id,"https://habr.com/ru/users/lubaznatel/")
-
-        
+'''
     
 @bot.callback_query_handler(func=lambda call: True)
 def query_handler(call):
@@ -668,15 +688,6 @@ def query_handler(call):
     elif call.data == 'until_education':
         answer = "no data"
         
-    '''elif call.data == 'laba_today':
-        ansver
-        
-
-
-    
-    elif call.data == 'laba_another_day':
-        answer = "no data"'''
-
     bot.send_message(call.message.chat.id, answer)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -694,7 +705,7 @@ def hours(message):
 
     
 def week_index_pool():#thread week poll
-    global week_index
+    global week_index, datee
     cache_now=0
     week_cache=0#input info
     week_index=2#input info
@@ -711,9 +722,11 @@ def week_index_pool():#thread week poll
             
         if week_index==3:
             week_index=1
-            
-laba_status=None          
-th1=Thread(target=week_index_pool)#thread settings
+
+labs_massive = []            
+laba_status1 = None
+laba_status2 = None
+th1=Thread(target = week_index_pool)#thread settings
 th1.start()#week_index thread polling
-bot.polling(none_stop=True)#bot work
+bot.polling(none_stop = True)#bot work
     
