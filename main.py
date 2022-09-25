@@ -3,6 +3,8 @@ from telebot import types
 import calendar
 from datetime import datetime
 from threading import Thread
+from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
+
 
 
 def schedule_returner(choise):#returns the schedule for a day/week
@@ -85,7 +87,6 @@ def schedule_returner(choise):#returns the schedule for a day/week
         ]
         }
             
-
     def returner_sch(day,index):#вывод дня
         returning_list_nums=[]
         returning_list_less=[]
@@ -286,16 +287,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
     
 
 def hours_returner(choise):
-    datee=datetime.now()
-    day_now=datee.day
-    weeks_in_month=calendar.monthcalendar(datee.year,datee.month)
-    for week in weeks_in_month:
-        if day_now in week:
-            week_index=int(weeks_in_month.index(week))+1
-            if week_index%2==0:
-                week_index=2
-            else:
-                week_index=1
+
 
 
 
@@ -558,21 +550,7 @@ def hours_returner(choise):
         print('до даты (point) осталось: {} дней, {} часов, {} минут, {} секунд'.format(d.days,hh,mm,ss))
         return 'до даты (point) осталось: {} дней, {} часов, {} минут, {} секунд'.format(d.days,hh,mm,ss)
 
-        
-        
-    datee=datetime.now()
-    day_now=datee.day
-    weeks_in_month=calendar.monthcalendar(datee.year,datee.month)
-    for week in weeks_in_month:
-        if day_now in week:
-            week_index=int(weeks_in_month.index(week))+1
-            if week_index%2==0:
-                week_index=2
-            else:
-                week_index=1
-                
-            
-            
+               
     if choise=="until_day":
         time_now_hours=datetime.now().hour
         time_now_minutes=datetime.now().minute
@@ -617,48 +595,99 @@ def schedule(message):
     markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
+    
+#########################################################################################################################################
 @bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
 def add_laba_1(message):
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1=types.KeyboardButton("Да, сегодня")
-    item2=types.KeyboardButton("Нет, в другой день")
-    markup.add(item1, item2)
-    bot.send_message(message.chat.id,'Лабараторная была сегодня?',reply_markup=markup)
-
+    item1=types.KeyboardButton("Основы алго")
+    item2=types.KeyboardButton("Скрипт язык")
+    item3=types.KeyboardButton("Языки разм")
+    item4=types.KeyboardButton("Технологии разраба")
+    markup.add(item1, item2, item3, item4)
+    markup.row_width = 2
+    bot.send_message(message.chat.id,'По какой дисциплине вы хотите добавить лабу?',reply_markup=markup)
     
-
-        
 @bot.message_handler(content_types=["text"])
 def static_reply(message):
     print("active reply")
-    global laba_status1
-    if message.text == 'Да, сегодня' and laba_status1 == None:
-        print("today update")
-        laba_status1 = "today"
-        bot.send_message(message.chat.id,'Введите название')
+    global laba_status1, laba_status2, laba_status3, laba_status4, laba_name
+    if message.text == 'Основы алго' and laba_status1 == None:#Основы алго
+        print("way1 selected")
+        laba_status2 = "way_1"
+        laba_status1 = None
+        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
         
+    elif message.text == 'Скрипт язык' and laba_status1 == None:
+        print("way2 selected")
+        laba_status2 = "way_2"
+        laba_status1 = None
+        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
 
-    elif message.text == 'Нет, в другой день' and laba_status1 == None:
-        laba_status1 = "another_day"
-        bot.send_message(message.chat.id,'Bведите название')
+    elif message.text == 'Языки разм' and laba_status1 == None:
+        print("way3 selected")
+        laba_status2 = "way_3"
+        laba_status1 = None
+        bot.send_message(message.chat.id,'Выберите дату: 🧭', reply_markup=None)
 
-    elif laba_status1 == "today" and message.text:
-        #message.text-название предмета
-        lab_name=message.text
-        lab_date_year=datee.year
-        lab_date_month=datee.month
-        lab_date_day=datee.day
-        lab_date_hour=datee.hour
-        lab_date_minute=datee.minute
-        lab_addiction=[lab_name,lab_date_year,lab_date_month,lab_date_day,lab_date_hour,lab_date_minute]
-        labs_massive.append(lab_addiction)
-        bot.send_message(message.chat.id,'Массив обновлён')
+    elif message.text == 'Технологии разраба' and laba_status1 == None:
+        print("way4 selected")
+        laba_status2 = "way_4"
+        laba_status1 = None
+        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
+
+        
+    elif message.text == 'Да, хочу' and laba_status3 == "active":
+        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1=types.KeyboardButton("отмена")
+        markup.add(item1)
+        bot.send_message(message.chat.id,'Введите текст заметки или отмените её создание',reply_markup=markup)
+        laba_status4 = "active"
+
+        
+    elif message.text == 'Нет, спасибо' and laba_status3 == "active":#laba creation with date, name, without message
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}',reply_markup=None)
+
+
+    elif message.text == 'отмена' and laba_status4 == "active":#laba creation with date, name, without message
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}',reply_markup=None)
+            
+    else: #laba_status1 != 'Основы алго' or laba_status1 != 'Скрипт язык' or laba_status1 != 'Языки разм' or laba_status1 != 'Технологии разраба'
+        bot.send_message(message.chat.id,'Неверная команда или значение👺',reply_markup=None)
         laba_status1 = None
 
-    elif laba_status1 == "another_day" and message.text:
-        pass
+
+            
+    #ways of going forward
+    if laba_status2 == "way_1":
+        print("way_1 was provided")
+        laba_name = 'Основы алго' 
+        laba_status1 = None
+        calendar, step = DetailedTelegramCalendar().build()
+        bot.send_message(message.chat.id, 'Календарь', reply_markup=calendar)
+
+
+
+@bot.callback_query_handler(func=DetailedTelegramCalendar.func())
+def cal(c):
+    global laba_status3, laba_status2, result
+    result, key, step = DetailedTelegramCalendar().process(c.data)
+    if not result and key:
+        bot.edit_message_text('Выберите дату: 🧭', c.message.chat.id, c.message.message_id, reply_markup=key)
+    elif result or c.message:
+        print(c.message)
+        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1=types.KeyboardButton("Да, хочу")
+        item2=types.KeyboardButton("Нет, спасибо")
+        markup.add(item1, item2)
+        markup.row_width = 2
+        bot.edit_message_text(f"Вы выбрали {result}", c.message.chat.id, c.message.message_id)
+        bot.send_message(c.message.chat.id,'Вы также можете добавить заметку к работе(вопросы, имя препода и т.д.).Хотите ли Вы это сделать?',reply_markup=markup)
+        laba_status3 = 'active'
+        laba_status2 = None
+        
     
-    #bot.send_message(message.chat.id,'Выберите корректный вариант ответа!')
+#########################################################################################################################################
         
 
 '''
@@ -701,8 +730,6 @@ def hours(message):
     markup.add(telebot.types.InlineKeyboardButton(text='До конца обучения', callback_data="until_education"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
-
-
     
 def week_index_pool():#thread week poll
     global week_index, datee
@@ -723,9 +750,12 @@ def week_index_pool():#thread week poll
         if week_index==3:
             week_index=1
 
-labs_massive = []            
 laba_status1 = None
 laba_status2 = None
+laba_status3 = None
+laba_status4 = None
+laba_name = ""
+labs_massive = []            
 th1=Thread(target = week_index_pool)#thread settings
 th1.start()#week_index thread polling
 bot.polling(none_stop = True)#bot work
