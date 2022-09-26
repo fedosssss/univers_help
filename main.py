@@ -90,7 +90,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
     def returner_sch(day,index):#вывод дня
         returning_list_nums=[]
         returning_list_less=[]
-        result=f'{day}:\n'
+        result=f'Расписание на\n'
         if index==1:
             for dicts in data_1.get(day):
                 for key in dicts.keys():
@@ -114,7 +114,7 @@ def schedule_returner(choise):#returns the schedule for a day/week
         return result
     
     def returner_sch_week(index):#not even beautiful def(doesn't affect)вывод недели
-        week_result=''
+        week_result='Расписание на неделю: \n'
         returning_list_nums=[]
         returning_list_less=[]
         result=''
@@ -269,7 +269,6 @@ def schedule_returner(choise):#returns the schedule for a day/week
             return returner_sch("Среда",week_index)
         
         elif day_now_in_week == 4:
-            print(week_index)
             return returner_sch("Четверг",week_index)
         
         elif day_now_in_week == 5:
@@ -287,10 +286,6 @@ def schedule_returner(choise):#returns the schedule for a day/week
     
 
 def hours_returner(choise):
-
-
-
-
     data_1 = {
         'Понедельник': [
             {'14:40-16:00':'Компьютерные языки разметки'},
@@ -323,9 +318,7 @@ def hours_returner(choise):
             {'13:00-14:20':'Технологии разработки программного обеспечения(лаба)'},
             {'14:00-16:00':'Математический анализ'}
         ]
-        }
-
-
+        } 
 
     data_2 = {
         'Понедельник': [
@@ -595,6 +588,16 @@ def schedule(message):
     markup.add(telebot.types.InlineKeyboardButton(text='На неделю', callback_data="for_a_week"))
     bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
+@bot.message_handler(commands=["hours"])
+def hours(message):
+    now_hour = datetime.now().hour
+    now_minute = datetime.now().minute    
+    markup = telebot.types.InlineKeyboardMarkup()
+    markup.add(telebot.types.InlineKeyboardButton(text='До конца пар', callback_data="until_day"))
+    markup.add(telebot.types.InlineKeyboardButton(text='До конца недели', callback_data="until_week"))
+    markup.add(telebot.types.InlineKeyboardButton(text='До конца обучения', callback_data="until_education"))
+    bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
+
     
 #########################################################################################################################################
 @bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
@@ -720,15 +723,6 @@ def query_handler(call):
     bot.send_message(call.message.chat.id, answer)
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-@bot.message_handler(commands=["hours"])
-def hours(message):
-    now_hour = datetime.now().hour
-    now_minute = datetime.now().minute    
-    markup = telebot.types.InlineKeyboardMarkup()
-    markup.add(telebot.types.InlineKeyboardButton(text='До конца пар', callback_data="until_day"))
-    markup.add(telebot.types.InlineKeyboardButton(text='До конца недели', callback_data="until_week"))
-    markup.add(telebot.types.InlineKeyboardButton(text='До конца обучения', callback_data="until_education"))
-    bot.send_message(message.chat.id, text="Выберите вариант:", reply_markup=markup)
 
     
 def week_index_pool():#thread week poll
