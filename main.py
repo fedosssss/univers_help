@@ -328,7 +328,7 @@ def hours_returner(choise):
             {'19:40-21:00':'Линейная алгебра и аналитическая геометрия(практа)'}
         ],    
         'Вторник': [
-            {'16:30-17:50':'Компьютерные языки разметки.(лаба)'},
+            {'16:30-17:50':'Компьютерные языки разметки(лаба)'},
             {'18:05-19:25':'Технологии разработки программного обеспечения'}
         ],
         'Среда': [
@@ -351,7 +351,7 @@ def hours_returner(choise):
         ]
         }
 
-    def time_returner(hour_now,minutes_now,day_now,week_index):
+    def time_returner(hour_now, minutes_now):
         day_now_in_week=datetime.today().isoweekday()
         if day_now_in_week == 1:
             returning_list_nums=[]
@@ -367,21 +367,21 @@ def hours_returner(choise):
                     for key in dicts.keys():
                         returning_list_nums.append(key)
                         
-            hour_now=datetime.now().hour
-            mins_now=datetime.now().minute
+            datee=datetime.now()            
             result=returning_list_nums[len(returning_list_nums)-1]
             time_spl=result.split('-')[1]
             hours_split=time_spl.split(':')[0]
             mins_split=time_spl.split(':')[1]
-            if time_spl.find('0')==0:
-                time_spl=time.split('-')[1].split(':')[1].replace("0",'')
-
-            last_hours=int(hours_split)-int(hour_now)
-            last_mins=int(mins_split)-int(mins_now)
-            week_result+=f'Конец пар в:\n {result}\n Конец через {abs(last_hours)} hours {abs(last_mins)} mins'
+            date=datetime(2022,9,13,19,7)
+            date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
+            point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
+            rez=point-date_now
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
-        if day_now_in_week == 2:
+        if day_now_in_week == 2:#here it works
             returning_list_nums=[]
             week_result=''
             result=''
@@ -404,8 +404,9 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            print(rez.strftime("%H")) 
-            week_result+=f'Конец пар в:\n {result}\n Конец через {hourss} hours {minss} mins'
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
         if day_now_in_week == 3:
@@ -422,18 +423,18 @@ def hours_returner(choise):
                     for key in dicts.keys():
                         returning_list_nums.append(key)
                         
-            hour_now=datetime.now().hour
-            mins_now=datetime.now().minute
+            datee=datetime.now()            
             result=returning_list_nums[len(returning_list_nums)-1]
             time_spl=result.split('-')[1]
             hours_split=time_spl.split(':')[0]
             mins_split=time_spl.split(':')[1]
-            if time_spl.find('0')==0:
-                time_spl=time.split('-')[1].split(':')[1].replace("0",'')
-
-            last_hours=int(hours_split)-int(hour_now)
-            last_mins=int(mins_split)-int(mins_now)
-            week_result+=f'Конец пар в:\n {result}\n Конец через {abs(last_hours)} hours {abs(last_mins)} mins'
+            date=datetime(2022,9,13,19,7)
+            date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
+            point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
+            rez=point-date_now
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
         if day_now_in_week == 4:
@@ -450,18 +451,18 @@ def hours_returner(choise):
                     for key in dicts.keys():
                         returning_list_nums.append(key)
                         
-            hour_now=datetime.now().hour
-            mins_now=datetime.now().minute
+            datee=datetime.now()            
             result=returning_list_nums[len(returning_list_nums)-1]
             time_spl=result.split('-')[1]
             hours_split=time_spl.split(':')[0]
             mins_split=time_spl.split(':')[1]
-            if time_spl.find('0')==0:
-                time_spl=time.split('-')[1].split(':')[1].replace("0",'')
-
-            last_hours=int(hours_split)-int(hour_now)
-            last_mins=int(mins_split)-int(mins_now)
-            week_result+=f'Конец пар в:\n {result}\n Конец через {abs(last_hours)} hours {abs(last_mins)} mins'
+            date=datetime(2022,9,13,19,7)
+            date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
+            point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
+            rez=point-date_now
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
 
         if day_now_in_week == 5:
@@ -478,19 +479,18 @@ def hours_returner(choise):
                     for key in dicts.keys():
                         returning_list_nums.append(key)
                         
-            hour_now=datetime.now().hour
-            mins_now=datetime.now().minute
+            datee=datetime.now()            
             result=returning_list_nums[len(returning_list_nums)-1]
             time_spl=result.split('-')[1]
             hours_split=time_spl.split(':')[0]
             mins_split=time_spl.split(':')[1]
-            if time_spl.find('0')==0:
-                time_spl=time.split('-')[1].split(':')[1].replace("0",'')
-                
-
-            last_hours=int(hours_split)-int(hour_now)
-            last_mins=int(mins_split)-int(mins_now)
-            week_result+=f'Конец пар в:\n {result}\n Конец через {abs(last_hours)} hours {abs(last_mins)} mins'
+            date=datetime(2022,9,13,19,7)
+            date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
+            point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
+            rez=point-date_now
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
         if day_now_in_week == 6:
@@ -507,18 +507,18 @@ def hours_returner(choise):
                     for key in dicts.keys():
                         returning_list_nums.append(key)
                         
-            hour_now=datetime.now().hour
-            mins_now=datetime.now().minute
+            datee=datetime.now()            
             result=returning_list_nums[len(returning_list_nums)-1]
             time_spl=result.split('-')[1]
             hours_split=time_spl.split(':')[0]
             mins_split=time_spl.split(':')[1]
-            if time_spl.find('0')==0:
-                time_spl=time.split('-')[1].split(':')[1].replace("0",'')
-
-            last_hours=int(hours_split)-int(hour_now)
-            last_mins=int(mins_split)-int(mins_now)
-            week_result+=f'Конец пар в:\n {result}\n Конец через {abs(last_hours)} hours {abs(last_mins)} mins'
+            date=datetime(2022,9,13,19,7)
+            date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
+            point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
+            rez=point-date_now
+            hours = str(rez).split(":")[0]
+            mins = str(rez).split(":")[1].split(":")[0]
+            week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
     def week_and_education_terurner(status):
@@ -528,26 +528,29 @@ def hours_returner(choise):
         weeks_in_month=calendar.monthcalendar(datee.year,datee.month)
         for week in weeks_in_month:
             if day_now in week:
-                last_week_day=week[len(week)-1]
+                cache_num=1
+                while week[len(week)-cache_num] == 0:
+                    cache_num=cache_num+1
+                    
+                last_week_day=week[len(week)-cache_num]
 
         datetime_now=datetime.today()
         if status=='week':
             point=datetime(datee.year,datee.month,last_week_day)#конец недели
             
         elif status=='education':
-            point=datetime(2026,6,30)#конец недели
+            point=datetime(2026,6,30)
             
-        until_week_time=point-datetime_now
-        mm,ss=divmod(until_week_time.seconds,60)
+        until_time=point-datetime_now
+        mm,ss=divmod(until_time.seconds,60)
         hh,mm=divmod(mm,60)
-        print('до даты (point) осталось: {} дней, {} часов, {} минут, {} секунд'.format(d.days,hh,mm,ss))
-        return 'до даты (point) осталось: {} дней, {} часов, {} минут, {} секунд'.format(d.days,hh,mm,ss)
+        return 'до даты {} осталось: {} дней, {} часов, {} минут, {} секунд'.format(point,until_time.days,hh,mm,ss)
 
                
     if choise=="until_day":
         time_now_hours=datetime.now().hour
         time_now_minutes=datetime.now().minute
-        return time_returner(time_now_hours,time_now_minutes,day_now,week_index)
+        return time_returner(time_now_hours,time_now_minutes)
     
     if choise=="until_week":
         return week_and_education_terurner('week')
@@ -555,8 +558,6 @@ def hours_returner(choise):
     if choise=="until_education":
         return week_and_education_terurner('education')
     
-
-
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 bot=telebot.TeleBot("5214184582:AAEP_U-5JSyRj6sS9_MW64VROTtljklZQfg")
 @bot.message_handler(commands=["start"])
@@ -603,58 +604,72 @@ def hours(message):
 @bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
 def add_laba_1(message):
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1=types.KeyboardButton("Основы алго")
-    item2=types.KeyboardButton("Скрипт язык")
-    item3=types.KeyboardButton("Языки разм")
-    item4=types.KeyboardButton("Технологии разраба")
+    markup.row_width = 1
+    item1=types.KeyboardButton("Основы алгоритмизации и программирования")
+    item2=types.KeyboardButton("Скриптовые языки программирования")
+    item3=types.KeyboardButton("Компьютерные языки разметки")
+    item4=types.KeyboardButton("Технологии разработки программного обеспечения")
     markup.add(item1, item2, item3, item4)
-    markup.row_width = 2
     bot.send_message(message.chat.id,'По какой дисциплине вы хотите добавить лабу?',reply_markup=markup)
     
 @bot.message_handler(content_types=["text"])
 def static_reply(message):
     print("active reply")
     global laba_status1, laba_status2, laba_status3, laba_status4, laba_name
-    if message.text == 'Основы алго' and laba_status1 == None:#Основы алго
+    if message.text == 'Основы алгоритмизации и программирования' and laba_status1 == None:#Основы алго
         print("way1 selected")
         laba_status2 = "way_1"
         laba_status1 = None
-        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
         
-    elif message.text == 'Скрипт язык' and laba_status1 == None:
+    elif message.text == 'Скриптовые языки программирования' and laba_status1 == None:
         print("way2 selected")
         laba_status2 = "way_2"
         laba_status1 = None
-        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
 
-    elif message.text == 'Языки разм' and laba_status1 == None:
+    elif message.text == 'Компьютерные языки разметки' and laba_status1 == None:
         print("way3 selected")
         laba_status2 = "way_3"
         laba_status1 = None
-        bot.send_message(message.chat.id,'Выберите дату: 🧭', reply_markup=None)
 
-    elif message.text == 'Технологии разраба' and laba_status1 == None:
+    elif message.text == 'Технологии разработки программного обеспечения' and laba_status1 == None:
         print("way4 selected")
         laba_status2 = "way_4"
         laba_status1 = None
-        bot.send_message(message.chat.id,'Выберите дату: 🧭',reply_markup=None)
 
         
     elif message.text == 'Да, хочу' and laba_status3 == "active":
         markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
         item1=types.KeyboardButton("отмена")
         markup.add(item1)
-        bot.send_message(message.chat.id,'Введите текст заметки или отмените её создание',reply_markup=markup)
+        bot.send_message(message.chat.id,'Введите текст заметки или отмените её создание', reply_markup=markup)
         laba_status4 = "active"
 
         
-    elif message.text == 'Нет, спасибо' and laba_status3 == "active":#laba creation with date, name, without message
-        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}',reply_markup=None)
+    elif message.text == 'Нет, спасибо' and laba_status3 == "active":
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}', reply_markup=None)
+        laba_message='no message'
+        laba_massive_cache = [laba_name, result, laba_message]
+        labs_massive.append(laba_massive_cache)
+        laba_massive_cache=[]
+        
 
 
-    elif message.text == 'отмена' and laba_status4 == "active":#laba creation with date, name, without message
-        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}',reply_markup=None)
-            
+    elif message.text == 'отмена' and laba_status4 == "active":
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}', reply_markup=None)
+        laba_message='no message'
+        laba_massive_cache = [laba_name, result, laba_message]
+        labs_massive.append(laba_massive_cache)
+        laba_massive_cache=[]
+
+    elif message.text and laba_status4 == 'active':
+        laba_message = message.text
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name} и с вашим сообщением!', reply_markup=None)
+        laba_massive_cache = [laba_name, result, laba_message]
+        labs_massive.append(laba_massive_cache)
+        laba_massive_cache=[]
+        
+        
+    
     else: #laba_status1 != 'Основы алго' or laba_status1 != 'Скрипт язык' or laba_status1 != 'Языки разм' or laba_status1 != 'Технологии разраба'
         bot.send_message(message.chat.id,'Неверная команда или значение👺',reply_markup=None)
         laba_status1 = None
@@ -677,8 +692,8 @@ def cal(c):
     result, key, step = DetailedTelegramCalendar().process(c.data)
     if not result and key:
         bot.edit_message_text('Выберите дату: 🧭', c.message.chat.id, c.message.message_id, reply_markup=key)
+        
     elif result or c.message:
-        print(c.message)
         markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
         item1=types.KeyboardButton("Да, хочу")
         item2=types.KeyboardButton("Нет, спасибо")
@@ -718,7 +733,7 @@ def query_handler(call):
         answer = hours_returner("until_week")
         
     elif call.data == 'until_education':
-        answer = "no data"
+        answer = hours_returner("until_education")
         
     bot.send_message(call.message.chat.id, answer)
 
@@ -728,7 +743,7 @@ def query_handler(call):
 def week_index_pool():#thread week poll
     global week_index, datee
     cache_now=0
-    week_cache=0#input info
+    week_cache=0#input info maybe isoweekday module 
     week_index=2#input info
     while True:
         datee=datetime.now()
@@ -749,7 +764,8 @@ laba_status2 = None
 laba_status3 = None
 laba_status4 = None
 laba_name = ""
-labs_massive = []            
+labs_massive = []
+laba_massive_cache=[]
 th1=Thread(target = week_index_pool)#thread settings
 th1.start()#week_index thread polling
 bot.polling(none_stop = True)#bot work
