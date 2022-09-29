@@ -573,13 +573,19 @@ def start(message):
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 @bot.message_handler(commands=["mass"])
 def labs_sender(message):
-    labs_result = ''
-    for data_mass in labs_massive:
-        for data_lab in data_mass:
-            print(' '.join(str(data_lab)))
+    if len(labs_massive) == 0:
+        bot.send_message(message.chat.id,"Текущих лаб нет😆")
+        
+
+    else:    
+        labs_result = ''
+        for data_mass in labs_massive:
+            for data_lab in data_mass:
+                print(' '.join(str(data_lab)))
             
             
-    bot.send_message(message.chat.id,str(labs_massive))
+            
+        bot.send_message(message.chat.id,str(labs_massive))
 
     
 @bot.message_handler(commands=["schedule"])#output of schedule on a day or week
@@ -615,7 +621,7 @@ def add_laba_1(message):
 @bot.message_handler(content_types=["text"])
 def static_reply(message):
     print("active reply")
-    global laba_status1, laba_status2, laba_status3, laba_status4, laba_name
+    global laba_status1, laba_status2, laba_status3, laba_status4, laba_status5, laba_name, number_laba
     if message.text == 'Основы алгоритмизации и программирования' and laba_status1 == None:#Основы алго
         print("way1 selected")
         laba_status2 = "way_1"
@@ -648,7 +654,7 @@ def static_reply(message):
     elif message.text == 'Нет, спасибо' and laba_status3 == "active":
         bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}', reply_markup=None)
         laba_message='no message'
-        laba_massive_cache = [laba_name, result, laba_message]
+        laba_massive_cache = [laba_name, number_laba, result, laba_message]
         labs_massive.append(laba_massive_cache)
         laba_massive_cache=[]
         
@@ -668,21 +674,33 @@ def static_reply(message):
         labs_massive.append(laba_massive_cache)
         laba_massive_cache=[]
         
-        
+    elif message.text and laba_status5 == 'active':
+        laba_status5 = ''
+        if message.text == 'Продолжить без номера лабы':
+            number_laba = 'no number'
+
+        else:
+            number_laba = str(message.text)
+            
+        calendar, step = DetailedTelegramCalendar().build()
+        bot.send_message(message.chat.id, 'Календарь', reply_markup=calendar)     
     
     else: #laba_status1 != 'Основы алго' or laba_status1 != 'Скрипт язык' or laba_status1 != 'Языки разм' or laba_status1 != 'Технологии разраба'
         bot.send_message(message.chat.id,'Неверная команда или значение👺',reply_markup=None)
         laba_status1 = None
 
-
+    
             
     #ways of going forward
     if laba_status2 == "way_1":
-        print("way_1 was provided")
-        laba_name = 'Основы алго' 
+        laba_name = 'Основы алго'
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1 = types.KeyboardButton("Продолжить без номера лабы")
+        markup.add(item1)
+        bot.send_message(message.chat.id, 'Введите номер лабораторной!', reply_markup=markup)
+        laba_status5 = 'active'
         laba_status1 = None
-        calendar, step = DetailedTelegramCalendar().build()
-        bot.send_message(message.chat.id, 'Календарь', reply_markup=calendar)
+
 
 
 
@@ -763,7 +781,9 @@ laba_status1 = None
 laba_status2 = None
 laba_status3 = None
 laba_status4 = None
+laba_status5 = None
 laba_name = ""
+number_laba = ''
 labs_massive = []
 laba_massive_cache=[]
 th1=Thread(target = week_index_pool)#thread settings
