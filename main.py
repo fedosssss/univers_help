@@ -376,8 +376,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
@@ -404,8 +404,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
@@ -432,8 +432,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
@@ -460,8 +460,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
 
@@ -488,8 +488,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
@@ -516,8 +516,8 @@ def hours_returner(choise):
             date_now=datetime(datee.year,datee.month,datee.day,datee.hour,datee.minute)
             point=datetime(datee.year,datee.month,datee.day,int(hours_split),int(mins_split))
             rez=point-date_now
-            hours = str(rez).split(":")[0]
-            mins = str(rez).split(":")[1].split(":")[0]
+            hours = str(abs(rez)).split(":")[0]
+            mins = str(abs(rez)).split(":")[1].split(":")[0]
             week_result+=f'Конец пар в:\n {result}\n Конец через {hours} hours {mins} mins'
             return week_result
         
@@ -544,7 +544,7 @@ def hours_returner(choise):
         until_time=point-datetime_now
         mm,ss=divmod(until_time.seconds,60)
         hh,mm=divmod(mm,60)
-        return 'до даты {} осталось: {} дней, {} часов, {} минут, {} секунд'.format(point,until_time.days,hh,mm,ss)
+        return 'до даты {} осталось: {} дней, {} часов, {} минут, {} секунд'.format(point,abs(until_time.days),abs(hh),abs(mm),abs(ss))
 
                
     if choise=="until_day":
@@ -571,24 +571,29 @@ def start(message):
               
     bot.send_message(message.chat.id,mess,parse_mode="html")
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-@bot.message_handler(commands=["mass"])
-def labs_sender(message):
+@bot.message_handler(commands=["laba_list"])
+def labs_sender(message):#[['Основы алго', '1', 'no data', 'no message'], ['Основы алго', datetime.date(2022, 9, 22), 'Тест']]
     if len(labs_massive) == 0:
         bot.send_message(message.chat.id,"Текущих лаб нет😆")
         
 
-    else:    
+    else:#[name, num, date, message]
         labs_result = ''
         for data_mass in labs_massive:
-            for data_lab in data_mass:
-                print(' '.join(str(data_lab)))
-            
-            
-            
-        bot.send_message(message.chat.id,str(labs_massive))
+            labs_result+=f"\n\nЛабораторная работа №{labs_massive.index(data_mass)+1}\n"
+            for i in range(len(data_mass)):
+                if data_mass[i-1] == None:
+                    print(labs_result)
+                    pass
+                
+                else:
+                    labs_result+=str(data_mass[i-1])
+                    print(labs_result)
+        print(labs_result)
+        bot.send_message(message.chat.id,str(labs_result))
 
     
-@bot.message_handler(commands=["schedule"])#output of schedule on a day or week
+@bot.message_handler(commands=["schedule"])#check markup
 def schedule(message):
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='На день', callback_data="for_a_day"))
@@ -607,7 +612,7 @@ def hours(message):
 
     
 #########################################################################################################################################
-@bot.message_handler(commands=["new_laba"])#output of schedule on a day or week
+@bot.message_handler(commands=["laba_new"])#output of schedule on a day or week
 def add_laba_1(message):
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row_width = 1
@@ -621,7 +626,7 @@ def add_laba_1(message):
 @bot.message_handler(content_types=["text"])
 def static_reply(message):
     print("active reply")
-    global laba_status1, laba_status2, laba_status3, laba_status4, laba_status5, laba_name, number_laba
+    global laba_status1, laba_status2, laba_status3, laba_status4, laba_status5, laba_status6, laba_name, number_laba, result
     if message.text == 'Основы алгоритмизации и программирования' and laba_status1 == None:#Основы алго
         print("way1 selected")
         laba_status2 = "way_1"
@@ -642,57 +647,74 @@ def static_reply(message):
         laba_status2 = "way_4"
         laba_status1 = None
 
-        
-    elif message.text == 'Да, хочу' and laba_status3 == "active":
-        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-        item1=types.KeyboardButton("отмена")
-        markup.add(item1)
-        bot.send_message(message.chat.id,'Введите текст заметки или отмените её создание', reply_markup=markup)
-        laba_status4 = "active"
 
         
-    elif message.text == 'Нет, спасибо' and laba_status3 == "active":
-        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}', reply_markup=None)
+    elif message.text == 'Продолжить без заметки' and laba_status4 == "active":#done
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name} без заметки', reply_markup=types.ReplyKeyboardRemove())
         laba_message='no message'
         laba_massive_cache = [laba_name, number_laba, result, laba_message]
         labs_massive.append(laba_massive_cache)
         laba_massive_cache=[]
-        
+        laba_status1=None
+        laba_status2=None
+        laba_status3=None
+        laba_status4=None
+        laba_status5=None
+        laba_status6=None
 
 
-    elif message.text == 'отмена' and laba_status4 == "active":
-        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name}', reply_markup=None)
-        laba_message='no message'
-        laba_massive_cache = [laba_name, result, laba_message]
-        labs_massive.append(laba_massive_cache)
-        laba_massive_cache=[]
 
-    elif message.text and laba_status4 == 'active':
+    elif message.text and laba_status4 == 'active':#done
         laba_message = message.text
-        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name} и с вашим сообщением!', reply_markup=None)
+        bot.send_message(message.chat.id,f'Хорошо, лаба добавлена на {result} по дисциплине {laba_name} и с вашим сообщением!', reply_markup=types.ReplyKeyboardRemove())
         laba_massive_cache = [laba_name, result, laba_message]
         labs_massive.append(laba_massive_cache)
         laba_massive_cache=[]
+        laba_status1=None
+        laba_status2=None
+        laba_status3=None
+        laba_status4=None
+        laba_status5=None
+        laba_status6=None
         
-    elif message.text and laba_status5 == 'active':
-        laba_status5 = ''
+    elif message.text and laba_status5 == 'active':#done
+        laba_status5 = None
+        laba_status2 = None
         if message.text == 'Продолжить без номера лабы':
             number_laba = 'no number'
 
         else:
             number_laba = str(message.text)
             
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1 = types.KeyboardButton("Добавить дату")
+        item2 = types.KeyboardButton("Без даты")
+        markup.add(item1, item2)
+        bot.send_message(message.chat.id, 'Хотите ли Вы добавить дату для будущей лабы?', reply_markup=markup)
+        laba_status6='active'
+
+    elif message.text == 'Добавить дату' and laba_status6 == 'active':
         calendar, step = DetailedTelegramCalendar().build()
-        bot.send_message(message.chat.id, 'Календарь', reply_markup=calendar)     
-    
+        bot.send_message(message.chat.id, 'Выберите дату', reply_markup=calendar)
+
+    elif message.text == "Без даты" and laba_status6 == 'active':
+        markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1=types.KeyboardButton("Продолжить без заметки")
+        markup.add(item1)
+        bot.send_message(message.chat.id,'Введите заметку(имя препода, доп. задания и т.д. или отмените создание заметки)',reply_markup=markup)
+        laba_status4 = 'active'
+        laba_status2 = None
+        result = 'no data'
+             
     else: #laba_status1 != 'Основы алго' or laba_status1 != 'Скрипт язык' or laba_status1 != 'Языки разм' or laba_status1 != 'Технологии разраба'
-        bot.send_message(message.chat.id,'Неверная команда или значение👺',reply_markup=None)
+        bot.send_message(message.chat.id,'Неверная команда или значение👺')
         laba_status1 = None
 
     
             
     #ways of going forward
     if laba_status2 == "way_1":
+        print('way one continue')
         laba_name = 'Основы алго'
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         item1 = types.KeyboardButton("Продолжить без номера лабы")
@@ -706,20 +728,18 @@ def static_reply(message):
 
 @bot.callback_query_handler(func=DetailedTelegramCalendar.func())
 def cal(c):
-    global laba_status3, laba_status2, result
+    global laba_status3, laba_status2, laba_status4, result
     result, key, step = DetailedTelegramCalendar().process(c.data)
     if not result and key:
         bot.edit_message_text('Выберите дату: 🧭', c.message.chat.id, c.message.message_id, reply_markup=key)
         
     elif result or c.message:
         markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
-        item1=types.KeyboardButton("Да, хочу")
-        item2=types.KeyboardButton("Нет, спасибо")
-        markup.add(item1, item2)
-        markup.row_width = 2
+        item1=types.KeyboardButton("Продолжить без заметки")
+        markup.add(item1)
         bot.edit_message_text(f"Вы выбрали {result}", c.message.chat.id, c.message.message_id)
-        bot.send_message(c.message.chat.id,'Вы также можете добавить заметку к работе(вопросы, имя препода и т.д.).Хотите ли Вы это сделать?',reply_markup=markup)
-        laba_status3 = 'active'
+        bot.send_message(c.message.chat.id,'Введите заметку(имя препода, доп. задания и т.д. или отмените создание заметки',reply_markup=markup)
+        laba_status4 = 'active'
         laba_status2 = None
         
     
@@ -762,7 +782,7 @@ def week_index_pool():#thread week poll
     global week_index, datee
     cache_now=0
     week_cache=0#input info maybe isoweekday module 
-    week_index=2#input info
+    week_index=1#input info
     while True:
         datee=datetime.now()
         day_now=datee.day
@@ -782,6 +802,8 @@ laba_status2 = None
 laba_status3 = None
 laba_status4 = None
 laba_status5 = None
+laba_status6 = None
+result= ''
 laba_name = ""
 number_laba = ''
 labs_massive = []
